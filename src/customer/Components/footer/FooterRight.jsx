@@ -109,7 +109,7 @@ const ContainerRoot = styled.div`
   text-align: left;
   font-size: 14px;
   color: #000;
-  font-family: Roboto;
+  // font-family: Roboto;
   @media (max-width: 768px) {
     width: 100%;
   }
@@ -162,7 +162,7 @@ const FooterRight = memo(() => {
                       href="https://justjeans.jgl.com.au/shop/about"
                       target="_blank"
                     >
-                      About Just Jeans
+                      About Dotti
                     </FindAStore>
                   </Link>
                 </Item>
@@ -201,28 +201,19 @@ const FooterRight = memo(() => {
         <List2>
           <Item1>
             <Link>
-              <Stores
-                href="https://help.justjeans.com.au/"
-                target="_blank"
-              >{`Help & Information`}</Stores>
+              <Stores href="" target="_blank">{`Help & Information`}</Stores>
             </Link>
             <List>
               <Item>
                 <Link>
-                  <FindAStore
-                    href="https://justjeans.jgl.com.au/shop/delivery-information"
-                    target="_blank"
-                  >
+                  <FindAStore href="" target="_blank">
                     Delivery Information
                   </FindAStore>
                 </Link>
               </Item>
               <Item>
                 <Link>
-                  <FindAStore
-                    href="https://justjeans.jgl.com.au/shop/track-order"
-                    target="_blank"
-                  >
+                  <FindAStore href="" target="_blank">
                     Track My Order
                   </FindAStore>
                 </Link>
@@ -230,17 +221,14 @@ const FooterRight = memo(() => {
               <Item>
                 <Link>
                   <FindAStore
-                    href="https://justjeans.jgl.com.au/shop/returns-and-exchanges"
+                    href=""
                     target="_blank"
                   >{`Returns & Exchanges`}</FindAStore>
                 </Link>
               </Item>
               <Item>
                 <Link>
-                  <FindAStore
-                    href="https://justjeans.jgl.com.au/shop/size-guide"
-                    target="_blank"
-                  >
+                  <FindAStore href="" target="_blank">
                     Size Guide
                   </FindAStore>
                 </Link>
@@ -248,7 +236,7 @@ const FooterRight = memo(() => {
               <Item>
                 <Link>
                   <FindAStore
-                    href="https://help.justjeans.com.au/"
+                    href=""
                     target="_blank"
                   >{`Help & Contact Us`}</FindAStore>
                 </Link>
@@ -300,7 +288,7 @@ const FooterRight = memo(() => {
             </List>
           </Item1>
           <Itemmargin>
-            <Item1>
+            {/* <Item1>
               <Link>
                 <Stores
                   href="https://justjeans.jgl.com.au/shop/jj-just-shop"
@@ -329,11 +317,11 @@ const FooterRight = memo(() => {
                   </Link>
                 </Item>
               </List>
-            </Item1>
+            </Item1> */}
           </Itemmargin>
         </List1>
         <List3>
-          <Item1>
+          {/* <Item1>
             <Link>
               <Stores
                 href="https://justjeans.jgl.com.au/shop/jj-womens-denim-fit-guide"
@@ -364,7 +352,7 @@ const FooterRight = memo(() => {
                 </Link>
               </Item>
             </List>
-          </Item1>
+          </Item1> */}
         </List3>
       </Container>
     </ContainerRoot>

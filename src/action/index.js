@@ -139,6 +139,23 @@ export const receiveProductsSearch = (search) => {
   });
 };
 
+export const getSearchPrice = (price) => {
+  const { min, max } = price;
+  return new Promise((resolve, reject) => {
+    get(`filters/dotti/price?minPrice=${min}&maxPrice=${max}`)
+      .then((response) => {
+        if (response.status === 200) {
+          resolve(response.data);
+        } else {
+          reject(new Error("Failed to fetch data"));
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 export const receiveGetContent = () => {
   return new Promise((resolve, reject) => {
     get("getContent")

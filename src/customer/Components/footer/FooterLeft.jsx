@@ -19,11 +19,13 @@ const FooterLeft = memo(() => {
       <Container8>
         <Container7>
           <Form>
-            <h3>JOIN JUST JEANS</h3>
+            <h3 style={{ fontWeight: "bold", textAlign: "left" }}>
+              COME ON, LET'S DOTTI
+            </h3>
 
-            <p>
-              Join today to receive 10% off at Just Jeans for the next month &
-              be the first to receive VIP offers and must-have denim trends.
+            <p style={{ margin: "6px 0", textAlign: "left" }}>
+              Sign up today and get 30% OFF your next full price purchase at
+              Dotti.
             </p>
             <Link>
               <Join
@@ -36,7 +38,7 @@ const FooterLeft = memo(() => {
           </Form>
           <Container3>
             <Container2>
-              <GetToKnow>GET TO KNOW US</GetToKnow>
+              <GetToKnow>#LETSDOTTI</GetToKnow>
             </Container2>
             <List>
               <Itemmargin>
@@ -95,8 +97,8 @@ const Join = styled.a`
 `;
 const Link = styled.div`
   width: 100%;
-
-  background-color: #000d42;
+  margin: 15px auto;
+  background-color: black;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -263,7 +265,7 @@ const Container8 = styled.div`
   justify-content: center;
 `;
 const MarginRoot = styled.div`
-  width: 40%;
+  width: 35%;
   display: flex;
   flex-direction: column;
   align-text: center;
@@ -273,7 +275,7 @@ const MarginRoot = styled.div`
   text-align: left;
   font-size: 14px;
   color: #000;
-  font-family: Roboto;
+  // font-family: Roboto;
   @media (max-width: 768px) {
     width: 100%;
   }

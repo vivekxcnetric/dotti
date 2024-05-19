@@ -15,21 +15,32 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Pagination from "@mui/material/Pagination";
-
+import { FaAlgolia } from "react-icons/fa6";
 import { filters, singleFilter, sortOptions } from "./FilterData";
 import ProductCard from "../ProductCard/ProductCard";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { productdata } from "../../../../data";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import {
   findProducts,
   findProductsByCategory,
 } from "../../../../Redux/Customers/Product/Action";
-import { deepPurple } from "@mui/material/colors";
-import { Backdrop, CircularProgress, Grid, TextField } from "@mui/material";
+// import { deepPurple } from "@mui/material/colors";
+import {
+  Backdrop,
+  CircularProgress,
+  Grid,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import BackdropComponent from "../../BackDrop/Backdrop";
-import { receiveProducts, receiveProductsSearch } from "../../../../action";
+import {
+  receiveProducts,
+  receiveProductsSearch,
+  getSearchPrice,
+} from "../../../../action";
 import { getProductsByFilter } from "../../../../action/cart";
 import Loader from "../../Loader/Loader";
 
@@ -50,6 +61,7 @@ export default function Product() {
   const [searchValue, setSearchValue] = useState("");
   const [searchProducts, setSearchProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingRadio, setLoadingRadio] = useState(false);
 
   const handleLoderClose = () => {
     setIsLoaderOpen(false);
@@ -66,6 +78,10 @@ export default function Product() {
   const pageNumber = searchParams.get("page") || 1;
   const stock = searchParams.get("stock");
   const [childCategories, setChildCategories] = useState([]);
+  const [length, setLength] = useState(true);
+  const [min, setMin] = useState("");
+  const [max, setMax] = useState("");
+  const [noProductFound, setNoProductFound] = useState("");
 
   // console.log("location - ", colorValue, sizeValue,price,disccount);
 
@@ -118,6 +134,53 @@ export default function Product() {
     });
   }, []);
 
+  useEffect(() => {
+    // Simulate initial data fetch when the component mounts
+    // Assuming getSearchPrice is an async function that fetches data
+    getSearchPrice({ min, max }).then((data) => {
+      setSearchProducts(data.hits);
+      // setProducts(data.hits);
+      setLoading(false); // Set loading to false after data is fetched
+    });
+  }, []);
+
+  const handlePrice = (e) => {
+    e.preventDefault(); // Prevent form submission
+    if (min !== "" && max !== "") {
+      setLoading(true); // Set loading to true when fetching data
+      let priceData = { min, max };
+      getSearchPrice(priceData)
+        .then((data) => {
+          setSearchProducts(data.hits);
+          // setProducts(data.hits);
+          setLoading(false); // Set loading to false when data is fetched
+        })
+        .catch((error) => {
+          console.log("this is error", error);
+          setLoading(false);
+          setLength(false);
+          toast.error(`No products found in this price range.`, {
+            style: {
+              borderRadius: "10px",
+              background: "#333",
+              color: "#fff",
+            },
+          });
+          // setNoProductFound("");
+        });
+      setMin("");
+      setMax("");
+    } else {
+      toast.error("Please enter the price range", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
+  };
+
   const handleFilter = (value, sectionId) => {
     const searchParams = new URLSearchParams(location.search);
 
@@ -147,10 +210,11 @@ export default function Product() {
 
   const handleRadioFilterChange = (e, sectionId) => {
     setSearchValue(e.target.value);
-    const searchParams = new URLSearchParams(location.search);
-    searchParams.set(sectionId, e.target.value);
-    const query = searchParams.toString();
-    navigate({ search: `?${query}` });
+    setLoading(true);
+    // const searchParams = new URLSearchParams(location.search);
+    // searchParams.set(sectionId, e.target.value);
+    // const query = searchParams.toString();
+    // navigate({ search: `?${query}` });
   };
 
   useEffect(() => {
@@ -163,6 +227,7 @@ export default function Product() {
 
   const TextFielData = (e) => {
     setSearchValue(e.target.value);
+    setLoading(true);
     // let OriginalProudcts = products;
 
     // if (e.target.value.length > 0) {
@@ -177,7 +242,7 @@ export default function Product() {
 
   useEffect(() => {
     // let OriginalProudcts = products;
-
+    console.log("this is searchValue", searchValue);
     if (searchValue) {
       // let searchResults = products?.filter((eachUser) =>
       //   eachUser?.name?.toLowerCase().includes(searchValue)
@@ -186,11 +251,14 @@ export default function Product() {
 
       receiveProductsSearch(searchValue).then((data) => {
         setSearchProducts(data.hits);
+        setLoading(false);
       });
+      // setSearchValue("");
     } else {
       setSearchProducts(products);
+      setLoading(false);
     }
-  }, [searchValue.length]);
+  }, [searchValue?.length, searchValue]);
 
   useEffect(() => {
     getProductsByFilter().then((response) => {
@@ -200,7 +268,7 @@ export default function Product() {
   }, []);
 
   return (
-    <div className="bg-white -z-20 ">
+    <div className="bg-white -z-20 mt-10 ">
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -396,7 +464,7 @@ export default function Product() {
               <h2 className="py-5 font-semibold opacity-60 text-lg">
                 Categories
               </h2>
-              <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
+              <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                 {/* Filters */}
                 <form className="hidden lg:block border rounded-md p-5">
                   {/* {filters.map((section) => (
@@ -460,80 +528,160 @@ export default function Product() {
                       )}
                     </Disclosure>
                   ))} */}
+                  {/* Filters */}
+                  <form className="hidden lg:block border rounded-md p-5">
+                    <div className="text-md font-medium mb-4">Price</div>
+                    <div className="flex items-center mb-2 space-x-2">
+                      <input
+                        type="text"
+                        className="w-1/3 pl-2 pr-2 py-1 border border-gray-300 rounded"
+                        placeholder="Min"
+                        onChange={(e) => setMin(e.target.value)}
+                        value={min} // Add value attribute
+                      />
+                      <span className="mx-2 ">To</span>
+                      <input
+                        type="text"
+                        className="w-1/3 pl-2 pr-2 py-1 border border-gray-300 rounded"
+                        placeholder="Max"
+                        onChange={(e) => {
+                          setMax(e.target.value);
+                        }}
+                        value={max}
+                      />
+                      <button
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                        onClick={(e) => handlePrice(e)}
+                      >
+                        <span className="text-sm">GO</span>
+                      </button>
+                    </div>
+                    {/* <div className="flex flex-col space-y-2">
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="price"
+                          className="mr-2"
+                          onChange={(e) => {
+                            setMin("70");
+                            setMax("90");
+                            setLoading(true);
+                            console.log("this is e", e);
+                            handlePrice(e);
+                          }}
+                        />
+                        <span>$70 - $90</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input type="radio" name="price" className="mr-2" />
+                        <span>$90 - $110</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input type="radio" name="price" className="mr-2" />
+                        <span>$110+</span>
+                      </label>
+                    </div> */}
+                  </form>
+
                   {childCategories.map((section) => (
-                    <Disclosure
-                      // defaultOpen={true}
-                      as="div"
+                    <div
                       key={section.id}
                       className="border-b border-gray-200 py-6"
                     >
-                      {({ open }) => (
-                        <>
-                          <h3 className="-my-3 flow-root">
-                            <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                              <span className="font-medium text-gray-900">
-                                {section.name}
-                              </span>
-                              <span className="ml-6 flex items-center">
-                                {open ? (
-                                  <MinusIcon
-                                    className="h-5 w-5 transition-transform transform rotate-0"
-                                    aria-hidden="true"
-                                  />
-                                ) : (
-                                  <PlusIcon
-                                    className="h-5 w-5 transition-transform transform rotate-0"
-                                    aria-hidden="true"
-                                  />
-                                )}
-                              </span>
-                            </Disclosure.Button>
-                          </h3>
-                          <Disclosure.Panel className="pt-6">
-                            <FormControl>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                defaultValue="female"
-                                name="radio-buttons-group"
-                              >
-                                {section.children.map((data, optionIdx) => (
-                                  <>
-                                    <FormControlLabel
-                                      value={data.name}
-                                      control={<Radio />}
-                                      label={data.name}
-                                      // style={{ color: "black" }}
-                                      onChange={(e) =>
-                                        handleRadioFilterChange(e, section.id)
-                                      }
-                                    />
-                                  </>
-                                ))}
-                              </RadioGroup>
-                            </FormControl>
-                          </Disclosure.Panel>
-                        </>
+                      {section.children.length > 0 ? (
+                        <Disclosure>
+                          {({ open }) => (
+                            <>
+                              <h3 className="-my-3 flow-root">
+                                <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                  <span className="font-medium text-gray-900">
+                                    {section.name}
+                                  </span>
+                                  <span className="ml-6 flex items-center">
+                                    {open ? (
+                                      <MinusIcon
+                                        className="h-5 w-5 transition-transform transform rotate-0"
+                                        aria-hidden="true"
+                                      />
+                                    ) : (
+                                      <PlusIcon
+                                        className="h-5 w-5 transition-transform transform rotate-0"
+                                        aria-hidden="true"
+                                      />
+                                    )}
+                                  </span>
+                                </Disclosure.Button>
+                              </h3>
+                              <Disclosure.Panel className="pt-6">
+                                <FormControl>
+                                  <RadioGroup
+                                    aria-labelledby="demo-radio-buttons-group-label"
+                                    defaultValue="female"
+                                    name="radio-buttons-group"
+                                  >
+                                    {section.children.map((data, optionIdx) => (
+                                      <FormControlLabel
+                                        key={optionIdx}
+                                        value={data.name}
+                                        control={<Radio />}
+                                        label={data.name}
+                                        onChange={(e) => {
+                                          // setSearchValue(e.target.value);
+                                          setLength(true);
+                                          setLoading(true);
+                                          handleRadioFilterChange(
+                                            e,
+                                            section.id
+                                          );
+                                        }}
+                                      />
+                                    ))}
+                                  </RadioGroup>
+                                </FormControl>
+                              </Disclosure.Panel>
+                            </>
+                          )}
+                        </Disclosure>
+                      ) : (
+                        <div
+                          className="font-medium text-gray-900 cursor-pointer"
+                          onClick={(e) => {
+                            setLength(false);
+                            setSearchValue(section.name);
+                            setLoading(true);
+                          }}
+                        >
+                          {section.name}
+                        </div>
                       )}
-                    </Disclosure>
+                    </div>
                   ))}
                 </form>
 
                 {/* Product grid */}
-                <div className="lg:col-span-4 w-full ">
+                <div className="lg:col-span-3 w-full ">
                   <Grid item xs={12} mb={2}>
                     <TextField
                       required
                       id="Search"
                       name="Search"
-                      label="Search Here..."
+                      label="Search"
                       fullWidth
                       autoComplete="given-name"
                       type="text"
                       onChange={(e) => {
                         TextFielData(e);
                       }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <FaAlgolia style={{ color: "blue" }} />
+                          </InputAdornment>
+                        ),
+                      }}
                     />
                   </Grid>
+
                   {loading ? (
                     <Loader />
                   ) : (
@@ -541,9 +689,18 @@ export default function Product() {
                       {/* {customersProduct?.products?.content?.map((item) => (
                       <ProductCard product={item} />
                     ))} */}
-                      {searchProducts?.map((item) => (
-                        <ProductCard product={item} />
-                      ))}
+
+                      {searchProducts?.length > 0 ? (
+                        <>
+                          {searchProducts.map((item) => (
+                            <ProductCard key={item.id} product={item} />
+                          ))}
+                        </>
+                      ) : (
+                        <div className="text-2xl font-bold">
+                          No Product Found
+                        </div>
+                      )}
 
                       {/* <ProductCard product={products} /> */}
                     </div>
@@ -571,6 +728,7 @@ export default function Product() {
           <BackdropComponent open={false} />
         </section>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 }

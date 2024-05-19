@@ -15,7 +15,7 @@ const Container = styled.div`
   text-align: center;
   font-size: 16px;
   color: #000;
-  font-family: Roboto;
+  // font-family: Roboto;
 
   @media (max-width: 1280px) {
     // padding: 33px 32px 32px;

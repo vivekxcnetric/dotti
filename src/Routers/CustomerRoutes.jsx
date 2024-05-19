@@ -25,10 +25,12 @@ import FooterLeft from "../customer/Components/footer/FooterLeft";
 import styled from "styled-components";
 import FooterBrandList from "../customer/Components/footer/FooterBrandList";
 import ProfilePage from "../Pages/ProfilePage";
-import SignIn from "../customer/Components/Auth/SignIn";
+// import SignIn from "../customer/Components/Auth/SignIn";
 
-import SignUp from "../customer/Components/Auth/SignUp";
+// import SignUp from "../customer/Components/Auth/SignUp";
 import Navbar from "../customer/Components/Navbar/Navbar";
+import SignIn from "../Pages/SignIn";
+import SignUp from "../Pages/SignUp";
 import ShopSwitcher from "../customer/Components/Navbar/ShopSwitcher";
 const CustomerRoutes = () => {
   const location = useLocation();
