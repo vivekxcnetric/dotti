@@ -48,7 +48,11 @@ export default function Checkout() {
   };
 
   return (
-    <Box className="px-5 lg:px-32 " sx={{ width: "100%" }}>
+    <Box
+      className="px-5 lg:px-32 mt-15"
+      sx={{ width: "100%", marginTop: "40px" }}
+      // style={{ marginTop: "30px" }}
+    >
       <Stepper activeStep={step}>
         {steps.map((label, index) => {
           const stepProps = {};

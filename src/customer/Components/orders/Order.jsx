@@ -31,7 +31,7 @@ const Order = () => {
         <Loader />
       ) : (
         <>
-          <Box className="px-10">
+          <Box className="px-10" style={{ marginTop: "25px" }}>
             <Grid
               container
               spacing={0}

@@ -201,7 +201,7 @@ const SignIn = () => {
         },
       });
       setLoading(false); // Reset loading state
-    }, 4000); // Define TIMEOUT_DURATION in milliseconds
+    }, 6000); // Define TIMEOUT_DURATION in milliseconds
 
     try {
       // Dispatch login action

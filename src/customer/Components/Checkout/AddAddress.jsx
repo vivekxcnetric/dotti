@@ -113,7 +113,7 @@ export default function AddDeliveryAddressForm({ handleNext, handleBack }) {
     console.log("savedAddress updated:", savedAddress);
   }, [savedAddress]);
   return (
-    <Grid container spacing={4}>
+    <Grid container spacing={4} className="mt-10">
       <Grid item xs={12} lg={5}>
         <Box className="border rounded-md shadow-md h-[30.5rem] overflow-y-scroll ">
           {addresses?.contact?.map((item) => (

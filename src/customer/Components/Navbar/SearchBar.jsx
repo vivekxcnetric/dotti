@@ -161,6 +161,9 @@ const SearchBar = () => {
               color: "white",
               width: 32,
               height: 32,
+              "@media screen and (max-width: 1024px)": {
+                display: "none",
+              },
             }}
           >
             {

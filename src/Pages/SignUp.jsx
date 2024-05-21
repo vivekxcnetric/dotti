@@ -337,10 +337,10 @@ const SignUp = () => {
                 />
               </div>
               <div>
-                <label htmlFor="terms">
+                {/* <label htmlFor="terms">
                   Sign up to Portmans emails and receive 15% off your next full
                   price purchase at Portmans.
-                </label>
+                </label> */}
               </div>
             </div>
             {error && <ErrorText>{error}</ErrorText>}

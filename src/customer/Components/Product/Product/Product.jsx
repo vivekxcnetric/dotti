@@ -134,16 +134,6 @@ export default function Product() {
     });
   }, []);
 
-  useEffect(() => {
-    // Simulate initial data fetch when the component mounts
-    // Assuming getSearchPrice is an async function that fetches data
-    getSearchPrice({ min, max }).then((data) => {
-      setSearchProducts(data.hits);
-      // setProducts(data.hits);
-      setLoading(false); // Set loading to false after data is fetched
-    });
-  }, []);
-
   const handlePrice = (e) => {
     e.preventDefault(); // Prevent form submission
     if (min !== "" && max !== "") {
@@ -152,21 +142,37 @@ export default function Product() {
       getSearchPrice(priceData)
         .then((data) => {
           setSearchProducts(data.hits);
-          // setProducts(data.hits);
           setLoading(false); // Set loading to false when data is fetched
         })
         .catch((error) => {
           console.log("this is error", error);
           setLoading(false);
           setLength(false);
-          toast.error(`No products found in this price range.`, {
-            style: {
-              borderRadius: "10px",
-              background: "#333",
-              color: "#fff",
-            },
-          });
-          // setNoProductFound("");
+
+          // Show error message in toast
+          if (error.response && error.response.status === 404) {
+            toast.error(
+              error.response.data.error ||
+                "No products found in this price range.",
+              {
+                style: {
+                  borderRadius: "10px",
+                  background: "#333",
+                  color: "#fff",
+                },
+              }
+            );
+
+            setSearchProducts(products);
+          } else {
+            toast.error("An error occurred while fetching data", {
+              style: {
+                borderRadius: "10px",
+                background: "#333",
+                color: "#fff",
+              },
+            });
+          }
         });
       setMin("");
       setMax("");
@@ -268,7 +274,7 @@ export default function Product() {
   }, []);
 
   return (
-    <div className="bg-white -z-20 mt-10 ">
+    <div className="bg-white -z-20 mt-15 " style={{ marginTop: "30px" }}>
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>

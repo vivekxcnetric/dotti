@@ -125,20 +125,14 @@ const FooterRight = memo(() => {
         <List1>
           <Item1>
             <Link>
-              <Stores
-                href="https://justjeans.jgl.com.au/shop/stores"
-                target="_blank"
-              >
+              <Stores href="" target="">
                 Stores
               </Stores>
             </Link>
             <List>
               <Item>
                 <Link>
-                  <FindAStore
-                    href="https://justjeans.jgl.com.au/shop/stores"
-                    target="_blank"
-                  >
+                  <FindAStore href="" target="">
                     Find A Store
                   </FindAStore>
                 </Link>
@@ -148,30 +142,21 @@ const FooterRight = memo(() => {
           <Itemmargin>
             <Item1>
               <Link>
-                <Stores
-                  href="https://justjeans.jgl.com.au/shop/about"
-                  target="_blank"
-                >
+                <Stores href="" target="">
                   About Us
                 </Stores>
               </Link>
               <List>
                 <Item>
                   <Link>
-                    <FindAStore
-                      href="https://justjeans.jgl.com.au/shop/about"
-                      target="_blank"
-                    >
+                    <FindAStore href="" target="">
                       About Dotti
                     </FindAStore>
                   </Link>
                 </Item>
                 <Item>
                   <Link>
-                    <FindAStore
-                      href="https://justjeans.jgl.com.au/shop/careers"
-                      target="_blank"
-                    >
+                    <FindAStore href="" target="">
                       Careers
                     </FindAStore>
                   </Link>
@@ -179,17 +164,14 @@ const FooterRight = memo(() => {
                 <Item>
                   <Link>
                     <FindAStore
-                      href="https://justjeans.jgl.com.au/shop/terms-and-conditions"
-                      target="_blank"
+                      href=""
+                      target=""
                     >{`Terms & Conditions`}</FindAStore>
                   </Link>
                 </Item>
                 <Item>
                   <Link>
-                    <FindAStore
-                      href="https://justjeans.jgl.com.au/shop/better-practices"
-                      target="_blank"
-                    >
+                    <FindAStore href="" target="">
                       Better Practices
                     </FindAStore>
                   </Link>
@@ -201,19 +183,19 @@ const FooterRight = memo(() => {
         <List2>
           <Item1>
             <Link>
-              <Stores href="" target="_blank">{`Help & Information`}</Stores>
+              <Stores href="" target="">{`Help & Information`}</Stores>
             </Link>
             <List>
               <Item>
                 <Link>
-                  <FindAStore href="" target="_blank">
+                  <FindAStore href="" target="">
                     Delivery Information
                   </FindAStore>
                 </Link>
               </Item>
               <Item>
                 <Link>
-                  <FindAStore href="" target="_blank">
+                  <FindAStore href="" target="">
                     Track My Order
                   </FindAStore>
                 </Link>
@@ -222,13 +204,13 @@ const FooterRight = memo(() => {
                 <Link>
                   <FindAStore
                     href=""
-                    target="_blank"
+                    target=""
                   >{`Returns & Exchanges`}</FindAStore>
                 </Link>
               </Item>
               <Item>
                 <Link>
-                  <FindAStore href="" target="_blank">
+                  <FindAStore href="" target="">
                     Size Guide
                   </FindAStore>
                 </Link>
@@ -237,7 +219,7 @@ const FooterRight = memo(() => {
                 <Link>
                   <FindAStore
                     href=""
-                    target="_blank"
+                    target=""
                   >{`Help & Contact Us`}</FindAStore>
                 </Link>
               </Item>
@@ -247,40 +229,28 @@ const FooterRight = memo(() => {
         <List1>
           <Item1>
             <Link>
-              <Stores
-                href="https://justjeans.jgl.com.au/shop/jj-giftcards"
-                target="_blank"
-              >
+              <Stores href="" target="">
                 Gift Cards
               </Stores>
             </Link>
             <List>
               <Item>
                 <Link>
-                  <FindAStore
-                    href="https://justjeans.jgl.com.au/shop/jj-giftcards"
-                    target="_blank"
-                  >
+                  <FindAStore href="" target="">
                     Shop Gift Cards
                   </FindAStore>
                 </Link>
               </Item>
               <Item>
                 <Link>
-                  <FindAStore
-                    href="https://giftcards.justjeans.com.au/CheckBalance"
-                    target="_blank"
-                  >
+                  <FindAStore href="" target="">
                     Balance Enquiry
                   </FindAStore>
                 </Link>
               </Item>
               <Item>
                 <Link>
-                  <FindAStore
-                    href="https://help.justjeans.com.au/hc/en-au/categories/360006519572-Gift-Cards"
-                    target="_blank"
-                  >
+                  <FindAStore href="" target="">
                     Gift Card Help
                   </FindAStore>
                 </Link>
@@ -288,44 +258,44 @@ const FooterRight = memo(() => {
             </List>
           </Item1>
           <Itemmargin>
-            {/* <Item1>
-              <Link>
+            <Item1>
+              {/* <Link>
                 <Stores
-                  href="https://justjeans.jgl.com.au/shop/jj-just-shop"
-                  target="_blank"
+                  href="t-shop"
+                  target=""
                 >
                   JUST SHOP
                 </Stores>
-              </Link>
+              </Link> */}
               <List>
-                <Item>
+                {/* <Item>
                   <Link>
                     <FindAStore
-                      href="https://justjeans.jgl.com.au/shop/jj-just-shop"
-                      target="_blank"
+                      href="t-shop"
+                      target=""
                     >
                       About Just Shop
                     </FindAStore>
                   </Link>
-                </Item>
-                <Item>
+                </Item> */}
+                {/* <Item>
                   <Link>
                     <FindAStore
-                      href="https://justjeans.jgl.com.au/shop/jj-just-shop-terms-and-conditions"
-                      target="_blank"
+                      href="t-shop-terms-and-conditions"
+                      target=""
                     >{`Terms & Conditions`}</FindAStore>
                   </Link>
-                </Item>
+                </Item> */}
               </List>
-            </Item1> */}
+            </Item1>
           </Itemmargin>
         </List1>
         <List3>
           {/* <Item1>
             <Link>
               <Stores
-                href="https://justjeans.jgl.com.au/shop/jj-womens-denim-fit-guide"
-                target="_blank"
+                href="ens-denim-fit-guide"
+                target=""
               >
                 Denim Fit Guide
               </Stores>
@@ -334,8 +304,8 @@ const FooterRight = memo(() => {
               <Item>
                 <Link>
                   <FindAStore
-                    href="https://justjeans.jgl.com.au/shop/jj-womens-denim-fit-guide"
-                    target="_blank"
+                    href="ens-denim-fit-guide"
+                    target=""
                   >
                     Women
                   </FindAStore>
@@ -344,8 +314,8 @@ const FooterRight = memo(() => {
               <Item>
                 <Link>
                   <FindAStore
-                    href="https://justjeans.jgl.com.au/shop/jj-mens-denim-fit-guide"
-                    target="_blank"
+                    href="s-denim-fit-guide"
+                    target=""
                   >
                     Men
                   </FindAStore>

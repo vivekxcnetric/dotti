@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-// import { RadioGroup } from "@headlessui/react";
+import { RadioGroup } from "@headlessui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import ProductReviewCard from "./ProductReviewCard";
 import { Box, Button, Grid, LinearProgress, Rating } from "@mui/material";
@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { lengha_page1 } from "../../../../Data/Women/LenghaCholi";
 // import { gounsPage1 } from "../../../../Data/Gouns/gouns";
 import toast, { Toaster } from "react-hot-toast";
+// import "./productDetails.css";
 import {
   receiveProducts,
   receiveProductsById,
@@ -24,7 +25,6 @@ import { grey } from "@mui/material/colors";
 
 import ProductCard from "../ProductCard/ProductCard";
 import Loader from "../../Loader/Loader";
-import { RadioGroup } from "@headlessui/react";
 
 const product = {
   name: "Basic Tee 6-Pack",
@@ -82,35 +82,36 @@ function classNames(...classes) {
 export default function ProductDetails() {
   const [selectedSize, setSelectedSize] = useState();
   const [activeImage, setActiveImage] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { customersProduct, review, cartItems, newUser } = useSelector(
     (store) => store
   );
+  const [selectedImage, setSelectedImage] = useState(null);
   const { productId } = useParams();
   const jwt = localStorage.getItem("jwt");
   // console.log("param",productId,customersProduct.product)
   const [productDetails, setProductDetails] = useState({});
-  const [checkcart, setCheckCart] = useState(false);
+  const [checkCart, setCheckCart] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [selectedColor, setSelectedColor] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [topProducts, setTopProducts] = useState([]);
+
+  const [selectedColor, setSelectedColor] = useState(null);
+  const handleSetActiveImage = (image) => {
+    setActiveImage(image);
+  };
   const handleColorClick = (color, image) => {
     setSelectedColor(color);
     setSelectedImage(image);
   };
-  const handleSetActiveImage = (image) => {
-    setActiveImage(image);
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     // const data = { id:productDetails.product?.variants[0]?.id, size: selectedSize.name };
     // dispatch(addItemToCart({ data, jwt }));
     // navigate("/cart");
     // dispatch(AddItemToCartNew(productDetails.product?.variants[0]?.id))
+
     let parts;
 
     // Check if productDetails.variants exist
@@ -128,7 +129,6 @@ export default function ProductDetails() {
     if (!parts) {
       parts = productDetails?.partNumber;
     }
-
     if (newUser?.newUser?.userId) {
       AddItemToCartNew(parts, quantity).then((res) => {
         if (res.status === 201) {
@@ -172,8 +172,6 @@ export default function ProductDetails() {
     });
   }, [productId]);
 
-  const [topProducts, setTopProducts] = useState([]);
-
   useEffect(() => {
     receiveProducts().then((data) => {
       setTopProducts(data.hits);
@@ -182,21 +180,27 @@ export default function ProductDetails() {
 
   // console.log("reviews ", cartItems);
 
-  const CheckCardItem = (ID) => {
-    // let checkcart = false;
+  useEffect(() => {
+    const checkItem = CheckCardItem(productDetails?.sKUs?.[0]?.partNumber);
+    // console.log("productDetails", productDetails, checkItem);
+    setCheckCart(checkItem);
+  }, [cartItems, productDetails]);
 
+  const CheckCardItem = (ID) => {
     let Cart = cartItems?.cartItems?.orderItem;
+    let foundInCart = false;
     if (Cart && Cart.length > 0) {
       for (const cartItem of Cart) {
-        console.log(ID, cartItem.partNumber);
+        console.log("cartItem---", cartItem.partNumber, "ID---", ID);
 
         if (cartItem.partNumber === ID) {
-          // checkcart = true;
-          setCheckCart(true);
+          foundInCart = true;
+          break;
         }
       }
     }
-    return checkcart;
+    setCheckCart(foundInCart);
+    return foundInCart;
   };
 
   // useEffect(() => {
@@ -204,7 +208,7 @@ export default function ProductDetails() {
   // }, [cartItems?.cartItems?.cart?.lines.length]);
 
   return (
-    <div className="bg-white lg:px-20">
+    <div className="bg-white lg:px-20 mt-25">
       {loading ? (
         <Loader />
       ) : (
@@ -244,7 +248,7 @@ export default function ProductDetails() {
                 >
                   <div className="flex items-center">
                     <a
-                      href={"/"}
+                      href={"/shops"}
                       className="mr-2 text-sm font-medium text-gray-900"
                     >
                       Products
@@ -350,8 +354,8 @@ export default function ProductDetails() {
                 </div>
 
                 {/* Colors */}
-                {(productDetails.uniqueID === "3074457345616683709" ||
-                  productDetails.uniqueID === "3074457345616683703") && (
+                {(productDetails.uniqueID === "3074457345616683703" ||
+                  productDetails.uniqueID === "3074457345616683709") && (
                   <div className="mt-10">
                     {/* Selected Color */}
                     <div className="mb-4">
@@ -396,11 +400,14 @@ export default function ProductDetails() {
 
                 <form className="mt-10" onSubmit={handleSubmit}>
                   <div className="mt-10">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-medium text-gray-900">
-                        Size: {selectedSize}
-                      </h3>
-                    </div>
+                    {(productDetails.uniqueID === "3074457345616683703" ||
+                      productDetails.uniqueID === "3074457345616683709") && (
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-medium text-gray-900">
+                          Size: {selectedSize}
+                        </h3>
+                      </div>
+                    )}
 
                     <RadioGroup
                       value={selectedSize}
@@ -411,64 +418,69 @@ export default function ProductDetails() {
                         Choose a size
                       </RadioGroup.Label>
                       <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-10">
-                        {productDetails?.sizes?.map((size, index) => (
-                          <RadioGroup.Option
-                            key={index}
-                            value={size}
-                            // disabled={!size.inStock}
-                            className={({ active }) =>
-                              classNames(
-                                "group relative flex items-center justify-center rounded-md border py-2 px-4 text-sm font-medium uppercase hover:bg-gray-100 focus:outline-none",
-                                size || size.inStock
-                                  ? "cursor-pointer bg-white text-gray-900 shadow-sm"
-                                  : "cursor-not-allowed bg-gray-50 text-gray-200",
-                                active ? "ring-2 ring-indigo-500" : ""
-                              )
-                            }
-                          >
-                            {({ active, checked }) => (
-                              <>
-                                <RadioGroup.Label as="span">
-                                  {parseInt(size.match(/\d+/)[0])}
-                                </RadioGroup.Label>
-                                {size || size.inStock ? (
-                                  <span
-                                    className={classNames(
-                                      active ? "border" : "border-2",
-                                      checked
-                                        ? "border-indigo-500"
-                                        : "border-transparent",
-                                      "pointer-events-none absolute -inset-px rounded-md"
-                                    )}
-                                    aria-hidden="true"
-                                  />
-                                ) : (
-                                  <span
-                                    aria-hidden="true"
-                                    className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
-                                  >
-                                    <svg
-                                      className="absolute inset-0 h-full w-full stroke-2 text-gray-200"
-                                      viewBox="0 0 100 100"
-                                      preserveAspectRatio="none"
-                                      stroke="currentColor"
+                        {productDetails?.sizes
+                          ?.filter(
+                            (size) => !size.includes("- Sold Out Online")
+                          )
+                          .map((size, index) => (
+                            <RadioGroup.Option
+                              key={index}
+                              value={size}
+                              // disabled={!size.inStock}
+                              className={({ active }) =>
+                                classNames(
+                                  "group relative flex items-center justify-center rounded-md border py-2 px-4 text-sm font-medium uppercase hover:bg-gray-100 focus:outline-none",
+                                  size || size.inStock
+                                    ? "cursor-pointer bg-white text-gray-900 shadow-sm"
+                                    : "cursor-not-allowed bg-gray-50 text-gray-200",
+                                  active ? "ring-2 ring-indigo-500" : ""
+                                )
+                              }
+                            >
+                              {({ active, checked }) => (
+                                <>
+                                  <RadioGroup.Label as="span">
+                                    {size}
+                                  </RadioGroup.Label>
+                                  {size || size.inStock ? (
+                                    <span
+                                      className={classNames(
+                                        active ? "border" : "border-2",
+                                        checked
+                                          ? "border-indigo-500"
+                                          : "border-transparent",
+                                        "pointer-events-none absolute -inset-px rounded-md"
+                                      )}
+                                      aria-hidden="true"
+                                    />
+                                  ) : (
+                                    <span
+                                      aria-hidden="true"
+                                      className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
                                     >
-                                      <line
-                                        x1={0}
-                                        y1={100}
-                                        x2={100}
-                                        y2={0}
-                                        vectorEffect="non-scaling-stroke"
-                                      />
-                                    </svg>
-                                  </span>
-                                )}
-                              </>
-                            )}
-                          </RadioGroup.Option>
-                        ))}
+                                      <svg
+                                        className="absolute inset-0 h-full w-full stroke-2 text-gray-200"
+                                        viewBox="0 0 100 100"
+                                        preserveAspectRatio="none"
+                                        stroke="currentColor"
+                                      >
+                                        <line
+                                          x1={0}
+                                          y1={100}
+                                          x2={100}
+                                          y2={0}
+                                          vectorEffect="non-scaling-stroke"
+                                        />
+                                      </svg>
+                                    </span>
+                                  )}
+                                </>
+                              )}
+                            </RadioGroup.Option>
+                          ))}
                       </div>
                     </RadioGroup>
+
                     <div className="flex items-center mt-4">
                       <div className="mr-5">
                         <h3 className="text-sm font-medium text-gray-900 ">
@@ -527,80 +539,13 @@ export default function ProductDetails() {
                       </button>
                     </div>
                   </div>
-                  {/* <div className="mt-10">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium text-gray-900">Size</h3>
-                  </div>
-
-                  <RadioGroup
-                    value={selectedSize}
-                    onChange={setSelectedSize}
-                    className="mt-4"
-                  >
-                    <RadioGroup.Label className="sr-only">
-                      Choose a size
-                    </RadioGroup.Label>
-                    <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-10">
-                      {product.sizes.map((size) => (
-                        <RadioGroup.Option
-                          key={size.name}
-                          value={size}
-                          disabled={!size.inStock}
-                          className={({ active }) =>
-                            classNames(
-                              size.inStock
-                                ? "cursor-pointer bg-white text-gray-900 shadow-sm"
-                                : "cursor-not-allowed bg-gray-50 text-gray-200",
-                              active ? "ring-1 ring-indigo-500" : "",
-                              "group relative flex items-center justify-center rounded-md border py-1 px-1 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6"
-                            )
-                          }
-                        >
-                          {({ active, checked }) => (
-                            <>
-                              <RadioGroup.Label as="span">
-                                {size.name}
-                              </RadioGroup.Label>
-                              {size.inStock ? (
-                                <span
-                                  className={classNames(
-                                    active ? "border" : "border-2",
-                                    checked
-                                      ? "border-indigo-500"
-                                      : "border-transparent",
-                                    "pointer-events-none absolute -inset-px rounded-md"
-                                  )}
-                                  aria-hidden="true"
-                                />
-                              ) : (
-                                <span
-                                  aria-hidden="true"
-                                  className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
-                                >
-                                  <svg
-                                    className="absolute inset-0 h-full w-full stroke-2 text-gray-200"
-                                    viewBox="0 0 100 100"
-                                    preserveAspectRatio="none"
-                                    stroke="currentColor"
-                                  >
-                                    <line
-                                      x1={0}
-                                      y1={100}
-                                      x2={100}
-                                      y2={0}
-                                      vectorEffect="non-scaling-stroke"
-                                    />
-                                  </svg>
-                                </span>
-                              )}
-                            </>
-                          )}
-                        </RadioGroup.Option>
-                      ))}
-                    </div>
-                  </RadioGroup>
-                </div> */}
-                  {!CheckCardItem(productDetails?.partNumber) ? (
+                  {/* <div className="quantity text-sm font-medium text-gray-900">
+                    Qty:
+                    <button id="decrease-quantity">-</button>
+                    <span id="quantity">1</span>
+                    <button id="increase-quantity">+</button>
+                  </div> */}
+                  {!checkCart ? (
                     <Button
                       variant="contained"
                       type="submit"
@@ -652,30 +597,40 @@ export default function ProductDetails() {
 
                 <div className="mt-10">
                   <h3 className="text-sm font-medium text-gray-900">
-                    Highlights
+                    {productDetails.uniqueID === "3074457345616683703" ||
+                    productDetails.uniqueID === "3074457345616683709"
+                      ? "Description"
+                      : "Highlights"}
                   </h3>
 
                   <div className="mt-4">
-                    <ul
-                      role="list"
-                      className="list-disc space-y-2 pl-4 text-sm"
-                    >
-                      {product.highlights.map((highlight) => (
-                        <li key={highlight} className="text-gray-400">
-                          <span className="text-gray-600">{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    {productDetails.uniqueID === "3074457345616683703" ||
+                    productDetails.uniqueID === "3074457345616683709" ? (
+                      <h1 className="text-lg lg:text-lg tracking-tight text-gray-900 opacity-80 pt-1">
+                        {productDetails?.longDescription}
+                      </h1>
+                    ) : (
+                      <ul
+                        role="list"
+                        className="list-disc space-y-2 pl-4 text-sm"
+                      >
+                        {product.highlights.map((highlight) => (
+                          <li key={highlight} className="text-gray-400">
+                            <span className="text-gray-600">{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </div>
 
-                <div className="mt-10">
+                {/* <div className="mt-10">
                   <h2 className="text-sm font-medium text-gray-900">Details</h2>
 
                   <div className="mt-4 space-y-6">
                     <p className="text-sm text-gray-600">{product.details}</p>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </section>

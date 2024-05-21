@@ -104,7 +104,8 @@ const NavigationDropdown = () => {
               style={{
                 textTransform: "uppercase",
                 textDecoration: "none",
-                color: `${el.name === "sale" ? "red" : "#333"}`,
+                color: el.name.toLowerCase() === "sale" ? "red" : "#333",
+
                 fontWeight: "600",
               }}
             >

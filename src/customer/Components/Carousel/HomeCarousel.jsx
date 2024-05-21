@@ -8,7 +8,7 @@ const handleDragStart = (e) => e.preventDefault();
 
 const HomeCarousel = ({ images }) => {
   const navigate = useNavigate();
-  const item = images.slice(5, 7).map((item, index) => (
+  const item = images?.slice(5, 7).map((item, index) => (
     <img
       className="cursor-pointer"
       // onClick={() => navigate(item.path)}
@@ -27,13 +27,12 @@ const HomeCarousel = ({ images }) => {
   ));
   return (
     <>
-      <p className="flex h-10 items-center justify-center bg-black px-4 text-sm font-medium text-white sm:px-6 lg:px-8 tracking-wider">
-        $5 DELIVERY WHEN YOU SPEND{" "}
+      <p className="hidden sm:flex h-10 items-center justify-center bg-black px-4 text-sm font-medium text-white sm:px-6 lg:px-8 tracking-wider sm:text-base lg:text-lg">
+        $5 DELIVERY WHEN YOU SPEND
         <span className="font-extrabold tracking-wider inline-block px-1">
-          {" "}
           $130+
-        </span>{" "}
-        SITEWIDE |{" "}
+        </span>
+        SITEWIDE |
         <span className="font-extrabold tracking-wider inline-block px-1">
           ENDS SUNDAY
         </span>

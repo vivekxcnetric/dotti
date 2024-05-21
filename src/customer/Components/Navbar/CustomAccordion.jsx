@@ -96,7 +96,9 @@ const CustomAccordion = ({ drawer, setDrawer }) => {
   const [openIndex, setOpenIndex] = useState(null);
   const [openIndex1, setOpenIndex1] = useState(null);
   const [data, setData] = useState({ extraData: [] });
-  const auth = useSelector((state) => state.auth.auth);
+  // const auth = useSelector((state) => state.auth.auth);
+  const { auth, cart, newUser, cartItems } = useSelector((store) => store);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -166,7 +168,7 @@ const CustomAccordion = ({ drawer, setDrawer }) => {
 
         <div style={{ borderBottom: "2px solid black" }}></div>
 
-        {!auth && (
+        {!newUser?.newUser?.userId && (
           <AccordionItem>
             <AccordionButton onClick={() => toggleAccordion1(0)}>
               <div>Sign IN</div> <div>{openIndex1 === 0 ? "-" : "+"}</div>
@@ -189,7 +191,7 @@ const CustomAccordion = ({ drawer, setDrawer }) => {
             </AccordionContent>
           </AccordionItem>
         )}
-        {auth && (
+        {newUser?.newUser?.userId && (
           <AccordionItem>
             <AccordionButton onClick={() => toggleAccordion1(5)}>
               <div>

@@ -85,7 +85,7 @@ const Cart = () => {
   ]);
 
   return (
-    <div className="">
+    <div className="" style={{ marginTop: "30px" }}>
       {CartData?.cartItems?.orderItem?.length > 0 ? (
         loading ? (
           <Loader />
