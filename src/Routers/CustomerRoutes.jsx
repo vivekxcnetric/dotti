@@ -32,6 +32,7 @@ import Navbar from "../customer/Components/Navbar/Navbar";
 import SignIn from "../Pages/SignIn";
 import SignUp from "../Pages/SignUp";
 import ShopSwitcher from "../customer/Components/Navbar/ShopSwitcher";
+import App from "../customer/Components/App";
 const CustomerRoutes = () => {
   const location = useLocation();
 
@@ -109,6 +110,8 @@ const CustomerRoutes = () => {
           <Route path="/checkout" element={<Checkout />}></Route>
           <Route path="/payment/:orderId" element={<PaymentSuccess />}></Route>
           <Route path="/shops" element={<Product />}></Route>
+          <Route path="/search" element={<App />}></Route>
+
           <Route path="*" element={<NotFound />} />
         </Routes>
         <FooterWrapper>

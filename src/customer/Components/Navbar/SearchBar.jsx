@@ -128,7 +128,7 @@ const SearchBar = () => {
       ) : (
         <SearchButton
           onClick={() => {
-            navigate("/shops");
+            navigate("/search");
             setShowSearchInput(true);
           }}
         >
